@@ -1,0 +1,317 @@
+
+
+	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+	<html>
+	<head>
+		<title>Customer Details Input</title>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"><link href="style.css" rel="stylesheet" type="text/css">
+		<!-- calendar stuff -->
+		      <link rel="stylesheet" type="text/css" href="calendar/calendar-blue2.css" />
+		      <script type="text/javascript" src="calendar/calendar.js"></script>
+		      <script type="text/javascript" src="calendar/calendar-en.js"></script>
+		      <script type="text/javascript" src="calendar/calendar-setup.js"></script>
+		<!-- END calendar stuff -->
+
+	    <!-- expand/collapse function -->
+	    <SCRIPT type=text/javascript>
+		<!--
+		function collapseElem(obj)
+		{
+			var el = document.getElementById(obj);
+			el.style.display = 'none';
+		}
+
+
+		function expandElem(obj)
+		{
+			var el = document.getElementById(obj);
+			el.style.display = '';
+		}
+
+
+		//-->
+		</SCRIPT>
+		<!-- expand/collapse function -->
+
+
+		<!-- expand/collapse function -->
+		    <SCRIPT type=text/javascript>
+			<!--
+
+			// collapse all elements, except the first one
+			function collapseAll()
+			{
+				var numFormPages = 1;
+
+				for(i=2; i <= numFormPages; i++)
+				{
+					currPageId = ('mainForm_' + i);
+					collapseElem(currPageId);
+				}
+			}
+
+
+			//-->
+			</SCRIPT>
+		<!-- expand/collapse function -->
+
+
+		 <!-- validate -->
+		<SCRIPT type=text/javascript>
+		<!--
+			function validateField(fieldId, fieldBoxId, fieldType, required)
+			{
+				fieldBox = document.getElementById(fieldBoxId);
+				fieldObj = document.getElementById(fieldId);
+
+				if(fieldType == 'text'  ||  fieldType == 'textarea'  ||  fieldType == 'password'  ||  fieldType == 'file'  ||  fieldType == 'phone'  || fieldType == 'website')
+				{	
+					if(required == 1 && fieldObj.value == '')
+					{
+						fieldObj.setAttribute("class","mainFormError");
+						fieldObj.setAttribute("className","mainFormError");
+						fieldObj.focus();
+						return false;					
+					}
+
+				}
+
+
+				else if(fieldType == 'menu'  || fieldType == 'country'  || fieldType == 'state')
+				{	
+					if(required == 1 && fieldObj.selectedIndex == 0)
+					{				
+						fieldObj.setAttribute("class","mainFormError");
+						fieldObj.setAttribute("className","mainFormError");
+						fieldObj.focus();
+						return false;					
+					}
+
+				}
+
+
+				else if(fieldType == 'email')
+				{	
+					if((required == 1 && fieldObj.value=='')  ||  (fieldObj.value!=''  && !validate_email(fieldObj.value)))
+					{				
+						fieldObj.setAttribute("class","mainFormError");
+						fieldObj.setAttribute("className","mainFormError");
+						fieldObj.focus();
+						return false;					
+					}
+
+				}
+
+
+
+			}
+
+			function validate_email(emailStr)
+			{		
+				apos=emailStr.indexOf("@");
+				dotpos=emailStr.lastIndexOf(".");
+
+				if (apos<1||dotpos-apos<2) 
+				{
+					return false;
+				}
+				else
+				{
+					return true;
+				}
+			}
+
+
+			function validateDate(fieldId, fieldBoxId, fieldType, required,  minDateStr, maxDateStr)
+			{
+				retValue = true;
+
+				fieldBox = document.getElementById(fieldBoxId);
+				fieldObj = document.getElementById(fieldId);	
+				dateStr = fieldObj.value;
+
+
+				if(required == 0  && dateStr == '')
+				{
+					return true;
+				}
+
+
+				if(dateStr.charAt(2) != '/'  || dateStr.charAt(5) != '/' || dateStr.length != 10)
+				{
+					retValue = false;
+				}	
+
+				else	// format's okay; check max, min
+				{
+					currDays = parseInt(dateStr.substr(0,2),10) + parseInt(dateStr.substr(3,2),10)*30  + parseInt(dateStr.substr(6,4),10)*365;
+					//alert(currDays);
+
+					// 04/23/2015
+					 Date.prototype.yyyymmdd = function() {
+					   var yyyy = this.getFullYear().toString();
+					   var mm = (this.getMonth()+1).toString(); // getMonth() is zero-based
+					   var dd  = this.getDate().toString();
+					   return (mm[1]?mm:"0"+mm[0]) + '/' + (dd[1]?dd:"0"+dd[0]) + '/' + yyyy; // padding
+					  };
+
+					var d = new Date();
+
+					// convert to msec
+					// subtract local time zone offset
+					// get UTC time in msec
+					var utc = d.getTime() - (d.getTimezoneOffset() * 60000);
+
+					// create new Date object for different city
+					// using supplied offset
+					var offset = -5.5;
+					var nd = new Date(utc + (3600000*offset));
+					maxDateStr = nd.yyyymmdd();
+					//alert(maxDateStr);
+					//alert(nd.toLocaleString());
+					if(maxDateStr != '')
+					{
+						maxDays = parseInt(maxDateStr.substr(0,2),10) + parseInt(maxDateStr.substr(3,2),10)*30  + parseInt(maxDateStr.substr(6,4),10)*365;
+						//alert(maxDays);
+						if(currDays > maxDays)
+							retValue = false;
+					}
+
+					if(minDateStr != '')
+					{
+						minDays = parseInt(minDateStr.substr(0,2),10) + parseInt(minDateStr.substr(3,2),10)*30  + parseInt(minDateStr.substr(6,4),10)*365;
+						//alert(minDays);
+						if(currDays < minDays)
+							retValue = false;
+					}
+				}
+
+				if(retValue == false)
+				{
+					fieldObj.setAttribute("class","mainFormError");
+					fieldObj.setAttribute("className","mainFormError");
+					fieldObj.focus();
+					return false;
+				}
+			}
+		//-->
+		</SCRIPT>
+		<!-- end validate -->
+
+
+
+
+	</head>
+
+	<body onLoad="collapseAll()">
+
+	<div id="mainForm">
+
+
+
+
+		<div id="formHeader">
+				<h2 class="formInfo">Astrozing - Customer Input</h2>
+				<p class="formInfo">Please Enter Accurate Information to get Relevant Predictions</p>
+		</div>
+
+
+		<BR/><!-- begin form -->
+		<form method=post enctype=multipart/form-data action=predictions.php onSubmit="return validatePage1();"><ul class=mainForm id="mainForm_1">
+
+				<li class="mainForm" id="fieldBox_1">
+					<label class="formFieldQuestion">Date of Birth&nbsp;*&nbsp;<a class=info href=#><img src=imgs/tip_small.png border=0><span class=infobox>Enter Date of Birth</span></a></label><input type=text  name=dob id=dob value=""><button type=reset class=calendarStyle id=fieldDateTrigger_1></button><SCRIPT type='text/javascript'>   Calendar.setup({
+								inputField     :    "dob",   
+								ifFormat       :    "%m/%d/%Y",   
+								showsTime      :    false,          
+								button         :    "fieldDateTrigger_1",
+								singleClick    :    true,           
+								step           :    1                
+								});</SCRIPT></li>
+
+				<li class="mainForm" id="fieldBox_7">
+					<label class="formFieldQuestion">Time of Birth&nbsp;*&nbsp;<a class=info href=#><img src=imgs/tip_small.png border=0><span class=infobox>Enter Time of Birth as HOUR:MIN</span></a><br/> (Hour : Min)</label><input class=mainForm type=text name=hob id=hob size='2' value=''>:<input class=mainForm type=text name=minob id=minob size='2' value=''></li>
+		
+				<li class="mainForm" id="fieldBox_6">
+					<label class="formFieldQuestion">Place of Birth&nbsp;*&nbsp;<a class=info href=#><img src=imgs/tip_small.png border=0><span class=infobox>Enter City of Birth</span></a></label>		<select id="pob" name="pob"></select>
+				</li>
+
+				<li class="mainForm" id="fieldBox_2">
+					<label class="formFieldQuestion">First Name&nbsp;&nbsp;<a class=info href=#><img src=imgs/tip_small.png border=0><span class=infobox>Enter First Name</span></a></label><input class=mainForm type=text name=firstname id=firstname size='20' value=''></li>
+
+				<li class="mainForm" id="fieldBox_4">
+					<label class="formFieldQuestion">Middle Name&nbsp;&nbsp;<a class=info href=#><img src=imgs/tip_small.png border=0><span class=infobox>Enter Middle Name</span></a></label><input class=mainForm type=text name=middlename id=middlename size='20' value=''></li>
+
+				<li class="mainForm" id="fieldBox_5">
+					<label class="formFieldQuestion">Surname&nbsp;&nbsp;<a class=info href=#><img src=imgs/tip_small.png border=0><span class=infobox>Enter Surname</span></a></label><input class=mainForm type=text name=lastname id=lastname size='20' value=''></li>
+
+				<li class="mainForm" id="fieldBox_3">
+					<label class="formFieldQuestion">Country List&nbsp;&nbsp;<a class=info href=#><img src=imgs/tip_small.png border=0><span class=infobox>Enter Your Country</span></a></label>        <select id="countryid" name="countryid"></select>
+				</li>
+
+		
+		<!-- end of this page -->
+
+		<!-- page validation -->
+		<SCRIPT type=text/javascript>
+		<!--
+			function validatePage1()
+			{
+				try
+				{
+			
+					retVal = true;
+	//if (validateField('field_2','fieldBox_2','text',1) == false)
+	// retVal=false;
+	//if (validateField('field_3','fieldBox_3','country',1) == false)
+	// retVal=false;
+	//if (validateField('field_4','fieldBox_4','text',1) == false)
+	// retVal=false;
+	//if (validateField('field_5','fieldBox_5','text',1) == false)
+	// retVal=false;
+	if (validateField('hob','fieldBox_7','text',1) == false)
+	 retVal=false;
+	if (validateField('minob','fieldBox_7','text',1) == false)
+	 retVal=false;
+	if (validateField('pob','fieldBox_6','menu',1) == false)
+	 retVal=false;
+					if (validateDate('dob','fieldBox_1','date',1,'04/23/1921','03/23/2015') == false)
+	 retVal=false;
+
+					if(retVal == false)
+					{
+						alert('Please correct the errors.  Fields marked with an asterisk (*) are required');
+						return false;
+					}
+					return retVal;
+				}
+				catch (e)
+				{
+					alert(e);
+					return false;
+				}
+			}
+		//-->
+		</SCRIPT>
+
+		<!-- end page validaton -->
+
+
+
+		<!-- next page buttons --><li class="mainForm">
+					<input id="saveForm" class="mainForm" type="submit" value="Submit" />
+				</li>
+
+			</form>
+			<!-- end of form -->
+		<!-- close the display stuff for this page -->
+		</ul></div><div id="footer"><p class="footer"><a class=footer href=http://astrozing.com>Astrozing</a></p></div>
+
+		<script type= "text/javascript" src = "fillcountries.js"></script>
+        <script language="javascript">
+            fillCountries("countryid");
+            fillCities("pob");
+        </script>
+		
+	</body>
+	</html>
