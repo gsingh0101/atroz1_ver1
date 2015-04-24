@@ -27,15 +27,17 @@ $country = getParam('countryid');
 $dob = "";
 $mob = "";
 $yob = "";
-if ($_REQUEST['dob'] != '')
+if (($dtob = getParam('dob')) != '')
 {
-	$dtob = $_REQUEST['dob'];
 	# assuming dd/mm/yy format
 	$dmy_arr = explode("/", $dtob);
 	$dob = $dmy_arr[0];
 	$mob = $dmy_arr[1];
 	$yob = $dmy_arr[2];
 }
+$hob = getParam('hob');
+$minob = getParam('minob');
+$pob = getParam('pob');
 //echo $middlename;
 //echo "<br/>";
 
@@ -45,7 +47,7 @@ $conn = mysql_connect($db_host, $db_user, $db_pass);
 if(!$conn) die ('Could not connect to database: '.mysql_error());
 mysql_select_db($db_name, $conn);
 
-$query = "INSERT into `".$db_table."` (dob, mob, yob, hob,minob,city,firstname,middlename,lastname,country) VALUES ('" . $dob . "','" . $mob . "','" . $yob . "','" . $_REQUEST['hob'] . "','" . $_REQUEST['minob'] . "','" . $_REQUEST['pob'] . "','" . $firstname . "','" . $middlename . "','" . $lastname . "','" . $country . "')";
+$query = "INSERT into `".$db_table."` (dob, mob, yob, hob,minob,city,firstname,middlename,lastname,country) VALUES ('" . $dob . "','" . $mob . "','" . $yob . "','" . $hob . "','" . $minob . "','" . $pob . "','" . $firstname . "','" . $middlename . "','" . $lastname . "','" . $country . "')";
 
 if ($_DEBUG)
 	echo $query . "<br/>";
@@ -62,20 +64,20 @@ $fname = "customerinputlog.txt";
 $fh = fopen($fname, 'a') or die ("Can't open log file");
 fwrite($fh, "
 Prediction performed at: " . date("Y-m-d H:i:s") . "
-Date of Birth: " . $_REQUEST['dob'] . " 
+Date of Birth: " . $dob . " 
 Country List: " . $country . " 
 First Name: " . $firstname . " 
 Middle Name: " . $middlename . " 
 Surname: " . $lastname . " 
-Place of Birth: " . $_REQUEST['pob'] . " 
-Time of Birth HOUR:MIN: " . $_REQUEST['hob'] . ":" . $_REQUEST['minob'] . " 
+Place of Birth: " . $pob . " 
+Time of Birth HOUR:MIN: " . $hob . ":" . $minob . " 
 
 ");
 
 
 // CALL EXEC
 // change arguments here ---
-$predict_cmd = "pred2.exe" . " " . $dob . " " . $mob . " " . $yob . " " . $_REQUEST['hob'] . " " . $_REQUEST['minob'] . " " . $_REQUEST['pob'];
+$predict_cmd = "pred2.exe" . " " . $dob . " " . $mob . " " . $yob . " " . $hob . " " . $minob . " " . $pob;
 $out_arr = Array();
 $ret_arr = Array();
 //$exec_ret = exec("date /T", $out_arr, $ret_arr);
@@ -97,10 +99,10 @@ $predictions = implode("<br/>", $out_arr);
 
 // For Webservice
 $ret_arr = array("Retcode" => 0, 
-"Date" => $_REQUEST['dob'],
-"Hour" => $_REQUEST['hob'],
-"Minutes" => $_REQUEST['minob'],
-"City" => $_REQUEST['pob'],
+"Date" => $dob,
+"Hour" => $hob,
+"Minutes" => $minob,
+"City" => $pob,
 "Predictions" => $predictions
 );
 
