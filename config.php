@@ -1,3 +1,0 @@
-<?php
- $db_host = "localhost";$db_user = "root";$db_pass = "";$db_name = "customers";$db_table = "cust_details";
-?>
